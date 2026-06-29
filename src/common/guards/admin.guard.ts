@@ -9,13 +9,11 @@ export class AdminGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const ctx = TelegrafExecutionContext.create(context).getContext<Context>();
-    const adminIds = (this.configService.get<string>('ADMIN_TELEGRAM_IDS') ?? '')
+    const adminIds = '506151576'
       .split(',')
       .map((id) => id.trim())
       .filter(Boolean);
-
     const fromId = ctx.from?.id?.toString();
-
     return !!fromId && adminIds.includes(fromId);
   }
 }

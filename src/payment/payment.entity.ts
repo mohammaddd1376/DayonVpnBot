@@ -5,18 +5,14 @@ import {
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-
-// import { User } from '../../users/entities/user.entity';
 import { User } from '../users/user.entity';
 import { Plan } from '../plans/plan.entity';
 
-
 export enum PaymentStatus {
-  PENDING = 'PENDING',
+  PENDING  = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
 }
-
 
 @Entity()
 export class Payment {
@@ -26,46 +22,36 @@ export class Payment {
 
   @Column()
   userId: number;
-  
+
   @Column()
   planId: number;
 
   @ManyToOne(() => User)
   user: User;
 
-
   @ManyToOne(() => Plan)
   plan: Plan;
-
 
   @Column()
   amount: number;
 
+  @Column({ default: false })
+  approve: boolean;
 
-  // متن رسید
-  @Column({
-    type: 'text',
-    nullable: true,
-  })
+  @Column({ type: 'text', nullable: true })
   receiptText?: string;
 
-
-  // عکس رسید تلگرام
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   receiptImage?: string;
 
-
-  @Column({
-    type: 'enum',
-    enum: PaymentStatus,
-    default: PaymentStatus.PENDING,
-  })
+  @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.PENDING })
   status: PaymentStatus;
 
+  // ─── فیلد جدید ───────────────────────────────────────────────
+  // null = خرید جدید   |   عدد = ID کانفیگی که باید تمدید شود
+  @Column({ type: 'int', nullable: true, default: null })
+  renewConfigId: number | null;
 
   @CreateDateColumn()
   createdAt: Date;
-
 }
